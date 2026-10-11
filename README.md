@@ -18,6 +18,12 @@ Original user material remains in `sources_only/`. The deployment workflow publi
 
 ## Publishing
 
-Public site: https://hasimam.github.io/mizan-al-nubuwwa/
+Primary public site: https://mizan-al-nubuwwa.pages.dev/
+
+GitHub Pages mirror: https://hasimam.github.io/mizan-al-nubuwwa/
 
 The `.github/workflows/pages.yml` workflow deploys the `main` branch to GitHub Pages. Enable Pages with GitHub Actions as the source. All URLs are relative so project-path hosting works. A law can be shared directly with `#law-1` through `#law-21`.
+
+## Cloudflare Pages
+
+The primary site is a free Cloudflare Pages Direct Upload project named `mizan-al-nubuwwa`. It contains only `index.html`, `css/`, `js/`, and `assets/`. No Functions, Workers compute, database, or paid plan was enabled. Cloudflare deployments are separate from GitHub commits; future updates require uploading a fresh static archive through the project dashboard or configuring a deployment CLI. The existing GitHub Actions workflow continues to update the GitHub Pages mirror.
