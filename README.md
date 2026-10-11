@@ -1,0 +1,23 @@
+# ميزان النبوة — The Scale of Prophethood
+
+An Arabic-only static learning website exploring John Maxwell’s 21 leadership laws through editorial reflections grounded in the Qur’an and authentic Sunnah.
+
+## Technology and cost
+
+Plain HTML, CSS, and JavaScript, matching the frontend technology used by ProjectCanvas and al-qayoom-canvas. No backend, database, serverless functions, paid APIs, analytics, accounts, or subscriptions. Arabic fonts load from Google Fonts, with local system fallbacks. Hosting is GitHub Pages from a public repository; no paid plan or custom domain is needed.
+
+## Local preview
+
+Run `python3 -m http.server 8000` from this directory, then visit `http://localhost:8000`.
+
+## Content
+
+Edit `js/content.js` for the 21 laws, reflections, exercises, and references. The compass has four clickable poles. Selecting a path displays its laws in the details panel beneath it; each law opens to reveal the comparison, reference, and exercise. The initial panel remains empty with a selection prompt. Four paths preserve the supplied concept and grouping. The first five names and numbering were corrected against Maxwell’s official 25th anniversary workbook list; priorities remains law 17. Arabic names are descriptive translations, and summaries are original brief paraphrases. Islamic reflections are editorial applications, not quotations, fatwas, or claims of Prophetic endorsement of Maxwell’s framework. Scripture excerpts are labelled and linked to their sources.
+
+Original user material remains in `sources_only/`. The deployment workflow publishes only `index.html`, `css/`, `js/`, and `assets/`; it excludes source references and documentation from the website artifact.
+
+## Publishing
+
+Public site: https://hasimam.github.io/mizan-al-nubuwwa/
+
+The `.github/workflows/pages.yml` workflow deploys the `main` branch to GitHub Pages. Enable Pages with GitHub Actions as the source. All URLs are relative so project-path hosting works. A law can be shared directly with `#law-1` through `#law-21`.

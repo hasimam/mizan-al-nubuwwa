@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+.vercel/
+.env*
+playwright-report/
+test-results/
+
+sources_only/
+
+local-preview.png
