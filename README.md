@@ -24,7 +24,7 @@ Cloudflare Pages is the only website host. GitHub stores the source code; GitHub
 
 ## Cloudflare Pages
 
-The primary site is a free Cloudflare Pages Direct Upload project named `mizan-al-nubuwwa`. It contains only `index.html`, `css/`, `js/`, and `assets/`. No Functions, Workers compute, database, or paid plan was enabled. Cloudflare deployments are separate from GitHub commits; future updates require uploading a fresh static archive through the project dashboard or configuring a deployment CLI.
+The primary site is a free Cloudflare Pages Direct Upload project named `mizan-al-nubuwwa`. It contains only `index.html`, `css/`, `js/`, and `assets/`. No Functions, Workers compute, database, or paid plan was enabled. GitHub Actions deploys website changes pushed to `main` to this existing Cloudflare Pages project. See the automatic deployment section below. Manual dashboard uploads remain available as a fallback.
 
 ## Leadership Lab review preview
 
@@ -42,8 +42,19 @@ To restore the previous application from the project directory:
 tar -xzf parked/mizan-before-leadership-lab.tar.gz index.html css/styles.css js/app.js js/content.js
 ```
 
-The extra activity file is then unused. Preview the restored files before uploading. Publishing a rollback requires uploading the restored static artifact to Cloudflare Pages. As before, upload only `index.html`, `css/`, `js/`, and `assets/`; exclude parked backups, tests, screenshots, and source reference material.
+The extra activity file is then unused. Preview the restored files before uploading. To publish a rollback, commit and push the restored application files to `main`, or upload the restored static artifact manually to Cloudflare Pages. As before, upload only `index.html`, `css/`, `js/`, and `assets/`; exclude parked backups, tests, screenshots, and source reference material.
 
 ### Browser verification
 
 With a local server on port 8765 and Playwright available, run `node tests/activities.cjs`. Set `PLAYWRIGHT_MODULE` to an absolute Playwright module path if using a bundled installation. The test uses installed Google Chrome and covers every choice, preservation of displayed original text, deep links, disclosures, retries, keyboard controls, temporary state, and layouts at widths of 320, 390, 768, and 1280 pixels. Screenshots are saved under ignored `test-results/`. `MIZAN_TEST_URL` overrides the local URL.
+
+
+## Automatic deployment from GitHub
+
+`.github/workflows/deploy.yml` deploys changes to the public website files pushed to `main` using Cloudflare's official Wrangler action. Local commits must be pushed to GitHub before they can deploy. The workflow can also be started manually from the GitHub Actions tab; deployment is restricted to `main`.
+
+`scripts/package-site.py` prepares only `index.html`, `css/`, `js/`, and `assets/` in a temporary output directory. Parked backups, tests, documentation, Git metadata, and source reference material are excluded. JavaScript syntax is checked before deployment. Documentation-only and backup-only pushes do not trigger publication.
+
+The repository secret `CLOUDFLARE_API_TOKEN` authorizes Pages Write in this Cloudflare account. It expires on **October 25, 2027** and has no IP restriction so GitHub-hosted runners can use it. Renew the token and replace the encrypted secret before that date. Never commit the token or add it to workflow text. GitHub Actions has read-only repository permissions.
+
+Deployment status appears under **Actions → Deploy website** in GitHub. The production address remains https://mizan-al-nubuwwa.pages.dev/.

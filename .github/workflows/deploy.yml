@@ -1,0 +1,54 @@
+name: Deploy website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'css/**'
+      - 'js/**'
+      - 'assets/**'
+      - 'scripts/package-site.py'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-website
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/content.js
+          node --check js/activities.js
+          node --check js/app.js
+
+      - name: Package public website files
+        run: python3 scripts/package-site.py "$RUNNER_TEMP/mizan-site"
+
+      - name: Check deployment credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo 'Configure the CLOUDFLARE_API_TOKEN repository secret before deploying.'
+            exit 1
+          fi
+
+      - name: Deploy to existing Cloudflare Pages project
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: '5cc14d0bf2412809eddbcefde3e396be'
+          command: pages deploy "${{ runner.temp }}/mizan-site" --project-name=mizan-al-nubuwwa --branch=main
